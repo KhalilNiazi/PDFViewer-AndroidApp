@@ -1,21 +1,26 @@
 package com.khalil.pdfviewer.Model_Class;
 
-
 public class RecentFile {
-    private String name;
-    private String uri;
+    private String filePath;
+    private String fileName;
+    private long lastOpenedTime;
 
-    public RecentFile(String name, String uri) {
-        this.name = name;
-        this.uri = uri;
+    public RecentFile(String filePath, String fileName, long lastOpenedTime) {
+        this.filePath = filePath;
+        this.fileName = fileName;
+        this.lastOpenedTime = lastOpenedTime;
     }
 
-    public String getName() {
-        return name;
+
+    public String getFilePath() {
+        return filePath;
     }
 
-    public String getUri() {
-        return uri;
+    public String getFileName() {
+        return fileName;
+    }
+
+    public long getLastOpenedTime() {
+        return lastOpenedTime;
     }
 }
-

@@ -4,71 +4,62 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="6dp"
-    app:cardBackgroundColor="#1E1E1E">
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
-        <!-- PDF Icon -->
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/baseline_picture_as_pdf_24"
-            android:tint="#FF5252"
-            android:contentDescription="PDF Icon" />
-
-        <!-- File Info -->
-        <LinearLayout
+        <TextView
+            android:id="@+id/textFileName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
+            android:text="PDF File Name"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#212121"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnShareFile"
+            />
 
-            <TextView
-                android:id="@+id/recentFileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="File Name"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/textFileTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Last opened: 20 Jul 2025, 11:30 PM"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            app:layout_constraintTop_toBottomOf="@id/textFileName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnShareFile"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView
-                android:id="@+id/lastOpenedTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last opened: 2 hours ago"
-                android:textColor="#BBBBBB"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp" />
-        </LinearLayout>
-
-        <!-- Share Button -->
         <ImageButton
-            android:id="@+id/shareBtn"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_share"
+            android:id="@+id/btnShareFile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_share"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Share"
-            android:tint="#FFFFFF" />
+            android:contentDescription="Share this file"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Delete Button -->
         <ImageButton
-            android:id="@+id/deleteBtn"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_delete"
+            android:id="@+id/btnDeleteFile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_delete"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Delete"
-            android:tint="#FFFFFF" />
+            android:contentDescription="Delete this file"
+            app:layout_constraintTop_toBottomOf="@id/btnShareFile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>
