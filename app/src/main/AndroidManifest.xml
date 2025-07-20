@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PDFViewer"
         tools:targetApi="31">
+        <activity android:name=".PdfViewActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

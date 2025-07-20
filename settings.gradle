@@ -1,3 +1,5 @@
+// settings.gradle
+
 pluginManagement {
     repositories {
         google {
@@ -8,6 +10,7 @@ pluginManagement {
             }
         }
         mavenCentral()
+
         gradlePluginPortal()
     }
 }
@@ -16,8 +19,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https.jitpack.io' } // <-- MAKE SURE THIS LINE IS EXACTLY LIKE THIS
     }
 }
 
-rootProject.name = "PDF Viewer"
+rootProject.name = "PDF Viewer" // Or your actual project name
 include ':app'
