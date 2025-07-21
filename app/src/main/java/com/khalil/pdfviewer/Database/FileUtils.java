@@ -5,63 +5,61 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.text.DecimalFormat;
 
 public class FileUtils {
 
-    // Get absolute file path from URI by copying to app cache
-    public static String getPath(Context context, Uri uri) {
-        try {
-            String fileName = getFileName(context, uri);
-            File tempFile = new File(context.getCacheDir(), fileName);
+    // Get the display name of the file from URI
+    public static String getFileName(Context context, Uri uri) {
+        String name = null;
 
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            FileOutputStream outputStream = new FileOutputStream(tempFile);
-
-            byte[] buffer = new byte[1024];
-            int length;
-
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
+        if ("content".equals(uri.getScheme())) {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    name = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
             }
-
-            inputStream.close();
-            outputStream.close();
-
-            return tempFile.getAbsolutePath();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
+
+        if (name == null) {
+            name = uri.getLastPathSegment();
+        }
+
+        return name != null ? name : "Unknown.pdf";
     }
 
-    // Get filename from Uri
-    public static String getFileName(Context context, Uri uri) {
-        String result = null;
+    // Get the file size in bytes
+    public static long getFileSize(Context context, Uri uri) {
+        long size = 0;
 
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = context.getContentResolver()
-                    .query(uri, null, null, null, null);
-
-            if (cursor != null && cursor.moveToFirst()) {
-                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                if (nameIndex != -1) {
-                    result = cursor.getString(nameIndex);
+        if ("content".equals(uri.getScheme())) {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                    if (!cursor.isNull(sizeIndex)) {
+                        size = cursor.getLong(sizeIndex);
+                    }
                 }
-                cursor.close();
             }
         }
 
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result != null ? result.lastIndexOf('/') : -1;
-            if (cut != -1 && result != null) {
-                result = result.substring(cut + 1);
-            }
-        }
+        return size;
+    }
 
-        return result;
+    // Format the file size in readable form (e.g., 1.2 MB)
+    public static String formatFileSize(long sizeInBytes) {
+        if (sizeInBytes <= 0) return "0 B";
+
+        final String[] units = {"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(sizeInBytes) / Math.log10(1024));
+
+        return new DecimalFormat("#,##0.#").format(sizeInBytes / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+    // Try to get a readable file path (for display only)
+    public static String getFilePath(Context context, Uri uri) {
+        // For SAF Uris, file paths are not directly accessible — return display info instead
+        String name = getFileName(context, uri);
+        return "Storage Access Framework > " + name;
     }
 }

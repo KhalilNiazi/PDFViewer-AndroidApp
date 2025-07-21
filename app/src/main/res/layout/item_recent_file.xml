@@ -1,65 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="12dp">
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="8dp"
+    android:layout_marginHorizontal="8dp"
+    android:backgroundTint="#1E1E1E"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp">
 
         <TextView
-            android:id="@+id/textFileName"
-            android:layout_width="0dp"
+            android:id="@+id/fileNameText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PDF File Name"
-            android:textStyle="bold"
+            android:text="File Name"
             android:textSize="16sp"
-            android:textColor="#212121"
-            android:maxLines="1"
-            android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnShareFile"
-            />
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textFileTime"
-            android:layout_width="0dp"
+            android:id="@+id/filePathText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last opened: 20 Jul 2025, 11:30 PM"
+            android:layout_below="@id/fileNameText"
+            android:layout_marginTop="4dp"
+            android:text="File Location"
+            android:textSize="13sp"
+            android:textColor="#aaaaaa" />
+
+        <TextView
+            android:id="@+id/fileSizeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="500 KB"
             android:textSize="12sp"
-            android:textColor="#757575"
-            app:layout_constraintTop_toBottomOf="@id/textFileName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnShareFile"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:textColor="#cccccc" />
+
+        <TextView
+            android:id="@+id/lastOpenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/fileSizeText"
+            android:layout_marginTop="2dp"
+            android:text="Opened: Today"
+            android:textSize="11sp"
+            android:textColor="#888888" />
 
         <ImageButton
-            android:id="@+id/btnShareFile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@android:drawable/ic_menu_share"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Share this file"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:id="@+id/shareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:background="@null"
+            android:src="@drawable/baseline_share_24"
+            android:tint="@android:color/white" />
 
         <ImageButton
-            android:id="@+id/btnDeleteFile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@id/shareButton"
+            android:layout_marginEnd="8dp"
+            android:background="@null"
             android:src="@android:drawable/ic_menu_delete"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Delete this file"
-            app:layout_constraintTop_toBottomOf="@id/btnShareFile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:tint="#FF5252" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

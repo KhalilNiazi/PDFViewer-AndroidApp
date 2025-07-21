@@ -13,46 +13,64 @@ import java.util.List;
 
 public class RecentFileManager {
 
-    private static final String PREF_NAME = "pdf_viewer_prefs";
+    private static final String PREF_NAME = "recent_files_pref";
     private static final String KEY_RECENT_FILES = "recent_files";
 
-    public static void saveRecentFile(Context context, RecentFile newFile) {
+    // Save a recent file
+    public static void saveRecentFile(Context context, RecentFile recentFile) {
         List<RecentFile> recentFiles = getRecentFiles(context);
 
-        // Remove any old entry with the same path
-        recentFiles.removeIf(file -> file.getFilePath().equals(newFile.getFilePath()));
-
-        // Add new one on top
-        recentFiles.add(0, newFile);
-
-        // Limit the list to 10 items
-        if (recentFiles.size() > 10) {
-            recentFiles = recentFiles.subList(0, 10);
+        // Remove existing if already present (avoid duplicate)
+        for (int i = 0; i < recentFiles.size(); i++) {
+            if (recentFiles.get(i).getFilePath().equals(recentFile.getFilePath())) {
+                recentFiles.remove(i);
+                break;
+            }
         }
 
-        // Save back to SharedPreferences
+        // Add new at the top
+        recentFiles.add(0, recentFile);
+
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(recentFiles);
+
+        String json = new Gson().toJson(recentFiles);
         editor.putString(KEY_RECENT_FILES, json);
         editor.apply();
     }
 
+    // Get all recent files
     public static List<RecentFile> getRecentFiles(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         String json = prefs.getString(KEY_RECENT_FILES, null);
-        if (json == null) return new ArrayList<>();
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<RecentFile>>() {}.getType();
-        return gson.fromJson(json, type);
+        if (json != null) {
+            Type type = new TypeToken<List<RecentFile>>() {}.getType();
+            return new Gson().fromJson(json, type);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
+    // Delete a single recent file entry
     public static void deleteRecentFile(Context context, String filePath) {
         List<RecentFile> recentFiles = getRecentFiles(context);
-        recentFiles.removeIf(file -> file.getFilePath().equals(filePath));
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(KEY_RECENT_FILES, new Gson().toJson(recentFiles)).apply();
+        for (int i = 0; i < recentFiles.size(); i++) {
+            if (recentFiles.get(i).getFilePath().equals(filePath)) {
+                recentFiles.remove(i);
+                break;
+            }
+        }
+
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_RECENT_FILES, new Gson().toJson(recentFiles));
+        editor.apply();
+    }
+
+    // Clear all recent files
+    public static void clearRecentFiles(Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
+        editor.remove(KEY_RECENT_FILES);
+        editor.apply();
     }
 }

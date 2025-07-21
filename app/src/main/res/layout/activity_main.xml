@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="48dp" />
 
-    <!-- Card for PDF Picker -->
+    <!-- PDF Picker Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardContainer"
         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                 android:layout_marginBottom="20dp" />
 
             <Button
-                android:id="@+id/pickPdfBtn"
+                android:id="@+id/pickPdf_Btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pick a PDF File"
@@ -81,6 +81,21 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp" />
+    <!-- Clear Recent Button -->
+    <Button
+        android:id="@+id/clearRecentBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Recent"
+        android:textSize="14sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#B00020"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:cornerRadius="12dp"
+        app:layout_constraintTop_toBottomOf="@id/cardContainer"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- RecyclerView for Recent Files -->
     <androidx.recyclerview.widget.RecyclerView
@@ -88,7 +103,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="12dp"
-
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/recentLabel"
         app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintStart_toStartOf="parent"

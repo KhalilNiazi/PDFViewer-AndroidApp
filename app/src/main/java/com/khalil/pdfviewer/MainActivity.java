@@ -1,10 +1,10 @@
 package com.khalil.pdfviewer;
 
 import android.content.Intent;
+import android.content.ContentResolver;
+import android.content.UriPermission;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,90 +17,79 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khalil.pdfviewer.Adapter.RecentFilesAdapter;
 import com.khalil.pdfviewer.Database.FileUtils;
-import com.khalil.pdfviewer.Model_Class.RecentFile;
 import com.khalil.pdfviewer.Database.RecentFileManager;
+import com.khalil.pdfviewer.Model_Class.RecentFile;
 
-import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button pickPdfBtn;
     private RecyclerView recentRecyclerView;
+    private RecentFilesAdapter adapter;
 
-    private final ActivityResultLauncher<String> pdfPickerLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), this::onPdfPicked);
+    private final ActivityResultLauncher<String[]> filePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
+                if (uri != null) {
+                    openPdf(uri);
+                } else {
+                    Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pickPdfBtn = findViewById(R.id.pickPdfBtn);
         recentRecyclerView = findViewById(R.id.recentRecyclerView);
+        Button pickFileBtn = findViewById(R.id.pickPdf_Btn);
+        Button clearBtn = findViewById(R.id.clearRecentBtn);
 
+        setupRecyclerView();
+        loadRecentFiles();
 
-        pickPdfBtn.setOnClickListener(v -> pickPdf());
+        pickFileBtn.setOnClickListener(view ->
+                filePickerLauncher.launch(new String[]{"application/pdf"}));
 
-        setupRecentFiles();
+        clearBtn.setOnClickListener(view -> {
+            RecentFileManager.clearRecentFiles(this);
+            loadRecentFiles();
+        });
     }
 
-    private void pickPdf() {
-        pdfPickerLauncher.launch("application/pdf");
+    private void setupRecyclerView() {
+        recentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recentRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void onPdfPicked(Uri uri) {
-        if (uri != null) {
-            String path = FileUtils.getPath(this, uri);
-            if (path == null) {
-                Toast.makeText(this, "Unable to get file path", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            File file = new File(path);
-            String name = file.getName();
-
-            // Save to recent files
-            RecentFileManager.saveRecentFile(this, new RecentFile(name, path, System.currentTimeMillis()));
-
-            // Open PDF viewer
-            Intent intent = new Intent(this, PdfViewActivity.class);
-            intent.putExtra("pdfUri", uri.toString());
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "No PDF selected", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setupRecentFiles() {
+    private void loadRecentFiles() {
         List<RecentFile> recentFiles = RecentFileManager.getRecentFiles(this);
+        adapter = new RecentFilesAdapter(this, recentFiles, this::openPdf);
+        recentRecyclerView.setAdapter(adapter);
+    }
 
-        if (recentFiles.isEmpty()) {
-            Toast.makeText(this, "No recent PDFs found", Toast.LENGTH_SHORT).show();
+    private void openPdf(Uri uri) {
+        if (uri == null) {
+            Toast.makeText(this, "Invalid PDF URI", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        RecentFilesAdapter adapter = new RecentFilesAdapter(this, recentFiles, new RecentFilesAdapter.OnItemClickListener() {
-            @Override
-            public void onFileClick(RecentFile file) {
-                Intent intent = new Intent(MainActivity.this, PdfViewActivity.class);
-                intent.putExtra("pdfUri", Uri.fromFile(new File(file.getFilePath())).toString());
-                startActivity(intent);
-            }
+        try {
+            getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onFileDelete(RecentFile file, int position) {
-                RecentFileManager.deleteRecentFile(MainActivity.this, file.getFilePath());
-                setupRecentFiles(); // Refresh the list
-            }
-        });
+        String name = FileUtils.getFileName(this, uri);
+        long size = FileUtils.getFileSize(this, uri);
+        String path = uri.toString();
 
-        recentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recentRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        recentRecyclerView.setAdapter(adapter);
-        // Apply layout animation
-      /*  Animation animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down).getAnimation();
-        recentRecyclerView.setLayoutAnimation(animation);
-        recentRecyclerView.scheduleLayoutAnimation();*/
+        RecentFile file = new RecentFile(name, path, size);
+        RecentFileManager.saveRecentFile(this, file);
+
+        Intent intent = new Intent(this, PdfViewActivity.class);
+        intent.setData(uri);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 }
