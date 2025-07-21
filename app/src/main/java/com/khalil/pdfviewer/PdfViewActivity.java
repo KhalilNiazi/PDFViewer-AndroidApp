@@ -23,7 +23,7 @@ public class PdfViewActivity extends AppCompatActivity {
 
     private PDFView pdfView;
     private TextView pageIndicator, fileNameText, fileSizeText, filePathText;
-    private ImageButton zoomInBtn, zoomOutBtn, infoBtn, shareBtn;
+    private ImageButton zoomInBtn, zoomOutBtn, infoBtn, shareBtn,backBtn;
     private BottomSheetBehavior<View> bottomSheetBehavior;
 
     private int currentPage = 0;
@@ -40,6 +40,7 @@ public class PdfViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pdf_view);
 
         initViews();
+
 
         Intent intent = getIntent();
         pdfUri = intent.getData();
@@ -66,6 +67,7 @@ public class PdfViewActivity extends AppCompatActivity {
         zoomOutBtn = findViewById(R.id.zoomOut);
         infoBtn = findViewById(R.id.infoButton);
         shareBtn = findViewById(R.id.shareButton);
+        backBtn = findViewById(R.id.backButton);
 
         fileNameText = findViewById(R.id.fileNameText);
         fileSizeText = findViewById(R.id.fileSizeText);
@@ -75,6 +77,17 @@ public class PdfViewActivity extends AppCompatActivity {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setHideable(true);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(PdfViewActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
+
+            }
+        });
     }
 
     private void loadPdf(Uri uri) {
