@@ -2,7 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_gradient_start">#1A1D24</color>
-    <color name="dark_gradient_center">#1F222A</color>
-    <color name="dark_gradient_end">#242730</color>
- </resources>
+
+    <color name="ios_card_background">#F9F9FB</color>
+    <color name="ios_text_primary">#1C1C1E</color>
+    <color name="ios_text_secondary">#3C3C4399</color>
+    <color name="ios_text_tertiary">#3C3C434D</color>
+    <color name="ios_icon_tint">#007AFF</color>
+    <color name="ios_red">#FF3B30</color>
+    <color name="ios_light_background">#F9F9F9</color>
+    <color name="ios_text_dark">#1C1C1E</color>
+
+    <color name="ios_primary">#F5F5F5</color>
+    <color name="ios_primary_dark">#E0E0E0</color>
+    <color name="ios_accent">#007AFF</color>
+    <color name="ios_background">#FFFFFF</color>
+    <color name="ios_text">#000000</color>
+
+    <color name="ios_dark_primary">#1C1C1E</color>
+    <color name="ios_dark_primary_dark">#121212</color>
+    <color name="ios_dark_background">#000000</color>
+    <color name="ios_dark_text">#FFFFFF</color>
+
+
+
+</resources>

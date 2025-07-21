@@ -1,7 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.PDFViewer" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- Base Dark Theme -->
+    <style name="Base.Theme.PDFViewer" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/ios_primary</item>
+        <item name="colorPrimaryDark">@color/ios_primary_dark</item>
+        <item name="colorAccent">@color/ios_accent</item>
+        <item name="android:windowBackground">@color/ios_background</item>
+        <item name="android:textColor">@color/ios_text</item>
+        <item name="android:navigationBarColor">@color/ios_background</item>
+        <item name="android:statusBarColor">@color/ios_primary_dark</item>
     </style>
+
+    <style name="Theme.PDFViewer" parent="Base.Theme.PDFViewer" />
 </resources>
