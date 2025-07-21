@@ -5,9 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
-import com.khalil.pdfviewer.Database.FileUtils;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.khalil.pdfviewer.Database.FileUtils;
 
 import java.io.InputStream;
 
@@ -24,7 +23,6 @@ public class PdfViewActivity extends AppCompatActivity {
 
     private PDFView pdfView;
     private TextView pageIndicator, fileNameText, fileSizeText, filePathText;
-
     private ImageButton zoomInBtn, zoomOutBtn, infoBtn, shareBtn;
     private BottomSheetBehavior<View> bottomSheetBehavior;
 
@@ -85,12 +83,14 @@ public class PdfViewActivity extends AppCompatActivity {
 
             pdfView.fromStream(inputStream)
                     .defaultPage(currentPage)
-                    .enableSwipe(true)
-                    .swipeHorizontal(false)
-                    .enableDoubletap(true)
-                    .enableAntialiasing(true)
-                    .spacing(4)
-                    .pageFling(false)
+                    .enableSwipe(true)               // Vertical swipe
+                    .swipeHorizontal(false)          // Vertical scrolling
+                    .enableDoubletap(true)           // Double-tap to zoom
+                    .enableAntialiasing(true)        // Better rendering
+                    .spacing(4)                      // Space between pages
+                    .pageFling(false)                // Disable page fling for smooth scroll
+                    .pageSnap(false)                 // Disable snapping to page
+                    .scrollHandle(new DefaultScrollHandle(this)) // Adds scroll thumb
                     .onPageChange(new OnPageChangeListener() {
                         @Override
                         public void onPageChanged(int page, int pageCount) {
@@ -115,8 +115,6 @@ public class PdfViewActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-
-
         zoomInBtn.setOnClickListener(v -> {
             currentZoom += 0.2f;
             pdfView.zoomTo(currentZoom);
@@ -132,7 +130,6 @@ public class PdfViewActivity extends AppCompatActivity {
         infoBtn.setOnClickListener(v -> {
             if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                populateFileInfo();
             } else {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
