@@ -36,7 +36,7 @@ The objective was to create a robust, user-friendly PDF viewing application with
 
 | 🏠 Splash Screen | 📄 Home Screen | 📋 File Info Sheet |
 |:--------------:|:-------------:|:------------------:|
-| <img width="310" height="526" alt="Home Screen" src="https://github.com/user-attachments/assets/7ae4555b-1be3-43bf-9148-aca1e4f1055d" /> | <img width="301" height="526" alt="PDF View" src="https://github.com/user-attachments/assets/a189f8a7-ce56-4aff-9381-3f966c46b966" /> | <img width="260" height="568" alt="File Info" src="https://github.com/user-attachments/assets/ab9045a1-5421-4794-9072-14204d65c525" /> |
+| <img width="301" height="535" alt="Home Screen" src="https://github.com/user-attachments/assets/7ae4555b-1be3-43bf-9148-aca1e4f1055d" /> | <img width="301" height="526" alt="PDF View" src="https://github.com/user-attachments/assets/a189f8a7-ce56-4aff-9381-3f966c46b966" /> | <img width="260" height="568" alt="File Info" src="https://github.com/user-attachments/assets/ab9045a1-5421-4794-9072-14204d65c525" /> |
 
 ---
 
