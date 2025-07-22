@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        a
         android:background="@color/ios_text_tertiary" />
 
     <!-- Page Number Indicator -->
